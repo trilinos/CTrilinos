@@ -44,6 +44,7 @@ Questions? Contact M. Nicole Lemaster (mnlemas@sandia.gov)
 
 
 #include "CTrilinos_config.h"
+#include "Epetra_config.h"
 
 #include "CTrilinos_enums.h"
 #include "CEpetra_LAPACK.h"
@@ -605,11 +606,18 @@ void Epetra_LAPACK_GGSVD_double (
   const char JOBQ, const int M, const int N, const int P, int * K, 
   int * L, double * A, const int LDA, double * B, const int LDB, 
   double * ALPHA, double * BETA, double * U, const int LDU, 
-  double * V, const int LDV, double * Q, const int LDQ, 
-  double * WORK, int * IWORK, int * INFO )
+  double * V, const int LDV, double * Q, const int LDQ, double * WORK, 
+  #ifdef HAVE_EPETRA_LAPACK_GSSVD3
+    const int LWORK,
+  #endif
+  int * IWORK, int * INFO )
 {
     CEpetra::getConstLAPACK(selfID)->GGSVD(JOBU, JOBV, JOBQ, M, N, P, K, L, A, 
-        LDA, B, LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, IWORK, INFO);
+        LDA, B, LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK,
+      #ifdef HAVE_EPETRA_LAPACK_GSSVD3
+        LWORK, 
+      #endif
+        IWORK, INFO);
 }
 
 void Epetra_LAPACK_GGSVD_float ( 
@@ -618,10 +626,17 @@ void Epetra_LAPACK_GGSVD_float (
   int * L, float * A, const int LDA, float * B, const int LDB, 
   float * ALPHA, float * BETA, float * U, const int LDU, float * V, 
   const int LDV, float * Q, const int LDQ, float * WORK, 
+  #ifdef HAVE_EPETRA_LAPACK_GSSVD3
+    const int LWORK,
+  #endif
   int * IWORK, int * INFO )
 {
     CEpetra::getConstLAPACK(selfID)->GGSVD(JOBU, JOBV, JOBQ, M, N, P, K, L, A, 
-        LDA, B, LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, IWORK, INFO);
+        LDA, B, LDB, ALPHA, BETA, U, LDU, V, LDV, Q, LDQ, WORK, 
+     #ifdef HAVE_EPETRA_LAPACK_GSSVD3
+        LWORK, 
+     #endif
+        IWORK, INFO);
 }
 
 void Epetra_LAPACK_GEEV_double ( 
